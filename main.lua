@@ -47,10 +47,17 @@ function ClassicGuildBank:HandleChatCommand(input)
   end
 
   local deposits = self.db.char.deposits 
+  ClassicGuildBank:Print('number of deposits 2' .. #deposits)
   if #deposits > 0 then
     exportString  = exportString .. '[DEPOSITS]'
     for j=1, #deposits do
-      exportString = exportString .. '[' .. deposits[j].sender .. ',' .. deposits[j].itemId .. ',' .. deposits[j].quantity .. ',' .. deposits[j].money .. '];'
+      local sender = deposits[j].sender;
+
+      if sender == nil then
+        sender = 'Unkown Sender'
+      end
+
+      exportString = exportString .. '[' .. sender .. ',' .. deposits[j].itemId .. ',' .. deposits[j].quantity .. ',' .. deposits[j].money .. '];'
     end
 
     tinsert(self.db.char.history, 1, { date=date(), deposits=self.db.char.deposits});
@@ -374,6 +381,8 @@ function ClassicGuildBank:IsNewDeposit(uid)
   local returnValue = true;
 
   local deposits = self.db.char.deposits
+  ClassicGuildBank:Print('number of deposits' .. #deposits)
+
   for i=1, #deposits do
     local dep = deposits[i]
 
